@@ -1,42 +1,42 @@
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
-"use client";  
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ProductCard } from "../components/ProductCard";
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+}
+const fetchProducts = async (): Promise<{ products: Product[] }> => {
+  const res = await fetch("https://dummyjson.com/products");
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return res.json();
+};
 
-const ProductsPage = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("https://dummyjson.com/products");
-        setProducts(response.data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) {
-    return <p>Loading products...</p>;
-  }
+export default async function ProductsPage() {
+  const data = await fetchProducts();
+  const products: Product[] = data.products;
 
   return (
     <div>
-      <h2>Products</h2>
-      <div>
-        {products.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
+      <h1>Products</h1>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+        {products.map((product: Product) => (
+          <div key={product.id}>
+            <Image
+              src={product.thumbnail || "/placeholder.png"}
+              alt={product.title}
+              width={300}
+              height={200}
+              loading="lazy"
+            />
+            <h3>{product.title}</h3>
+            <p>${product.price}</p>
+            <Link href={`/products/${product.id}`}>View Product</Link>
+          </div>
         ))}
       </div>
     </div>
   );
-};
-
-export default ProductsPage;
+}

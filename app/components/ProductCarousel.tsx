@@ -13,10 +13,18 @@ const ProductCarousel = ({ images }: { images: string[] }) => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
+  if (images.length === 0) {
+    return <p>No images available</p>;
+  }
+
   return (
     <div>
       <button onClick={prevImage}>Previous</button>
-      <img src={images[currentIndex]} alt={`Image ${currentIndex + 1}`} width="300" />
+      <img
+        src={images[currentIndex] || "/placeholder.png"}
+        alt={`Image ${currentIndex + 1}`}
+        width="100"
+      />
       <button onClick={nextImage}>Next</button>
     </div>
   );
