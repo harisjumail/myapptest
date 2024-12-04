@@ -15,7 +15,7 @@ Clone this repository:
 
 bash
 Copy code
-git clone https://github.com/harisjumaik/myapptest.git
+git clone https://github.com/harisjumail/myapptest.git
 Navigate to the project directory:
 
 bash
